@@ -11,10 +11,10 @@ const filePath = path.join(__dirname, "canciones.json");
 
 app.use(express.json());
 
-// Variable para mantener las canciones en memoria
+
 let canciones = [];
 
-// Leer canciones desde el archivo JSON y actualizar la variable en memoria
+
 const leerCanciones = () => {
   try {
     const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
@@ -25,24 +25,21 @@ const leerCanciones = () => {
   }
 };
 
-// Escribir canciones en el archivo JSON
 const escribirCanciones = (data) => {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 };
 
-// Cargar las canciones iniciales al iniciar el servidor
-leerCanciones(); // Para cargar el contenido inicial en memoria
+leerCanciones(); 
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-// Obtener todas las canciones
 app.get("/canciones", (req, res) => {
-  res.json(canciones); // Responde con las canciones en memoria
+  res.json(canciones); 
 });
 
-// Agregar una nueva canción
+
 app.post("/canciones", (req, res) => {
   const nuevaCancion = { id: Date.now(), ...req.body }; 
   canciones.push(nuevaCancion); 
@@ -50,7 +47,6 @@ app.post("/canciones", (req, res) => {
   res.status(201).json({ mensaje: "Canción agregada", nuevaCancion });
 });
 
-// Editar una canción
 app.put("/canciones/:id", (req, res) => {
   const { id } = req.params;
   const index = canciones.findIndex((c) => c.id == id);
@@ -64,7 +60,6 @@ app.put("/canciones/:id", (req, res) => {
   }
 });
 
-// Eliminar una canción
 app.delete("/canciones/:id", (req, res) => {
   const { id } = req.params;
   const cancionesFiltradas = canciones.filter((c) => c.id != id);
