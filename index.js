@@ -41,6 +41,14 @@ app.get("/canciones", (req, res) => {
 
 
 app.post("/canciones", (req, res) => {
+  const {titulo, artista, tono} = req.body;
+  if (!titulo || !artista || !tono === undefined) {
+    return res.status(400).json({
+      error: "Todos los campos son requeridos.",
+    });
+  }
+
+
   const nuevaCancion = { id: Date.now(), ...req.body }; 
   canciones.push(nuevaCancion); 
   escribirCanciones(canciones); 
@@ -74,5 +82,5 @@ app.delete("/canciones/:id", (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log('Aplicación corriendo en el puerto 3000');
+  console.log('Aplicacion corriendo en http://localhost:3000');
 });
